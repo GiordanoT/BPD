@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:camunda="http://camunda.org/schema/1.0/bpmn" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:modeler="http://camunda.org/schema/modeler/1.0" id="Definitions_1hjimnf" targetNamespace="http://bpmn.io/schema/bpmn" exporter="Camunda Modeler" exporterVersion="5.22.0" modeler:executionPlatform="Camunda Platform" modeler:executionPlatformVersion="7.19.0">
+  <bpmn:process id="Process_1w6q9tq" name="Get User Data" isExecutable="true" camunda:historyTimeToLive="1">
+    <bpmn:startEvent id="StartEvent_1" name="start">
+      <bpmn:outgoing>Flow_1iztq11</bpmn:outgoing>
+      <bpmn:messageEventDefinition id="MessageEventDefinition_1klzfvy" messageRef="Message_2j623qs" />
+    </bpmn:startEvent>
+    <bpmn:endEvent id="Event_09xtvgk" name="end">
+      <bpmn:incoming>Flow_1tn9mdt</bpmn:incoming>
+    </bpmn:endEvent>
+    <bpmn:sequenceFlow id="Flow_1iztq11" sourceRef="StartEvent_1" targetRef="Activity_1c2ujb9" />
+    <bpmn:sequenceFlow id="Flow_0q6zbxs" sourceRef="Activity_1c2ujb9" targetRef="Activity_05dl5f8" />
+    <bpmn:serviceTask id="Activity_1c2ujb9" name="Get User Data">
+      <bpmn:extensionElements>
+        <camunda:connector>
+          <camunda:inputOutput>
+            <camunda:inputParameter name="method">GET</camunda:inputParameter>
+            <camunda:inputParameter name="url">${userService.endpoint(username)}</camunda:inputParameter>
+            <camunda:outputParameter name="user">${userService.output(response)}</camunda:outputParameter>
+          </camunda:inputOutput>
+          <camunda:connectorId>http-connector</camunda:connectorId>
+        </camunda:connector>
+      </bpmn:extensionElements>
+      <bpmn:incoming>Flow_1iztq11</bpmn:incoming>
+      <bpmn:outgoing>Flow_0q6zbxs</bpmn:outgoing>
+    </bpmn:serviceTask>
+    <bpmn:serviceTask id="Activity_05dl5f8" name="Get Zone List">
+      <bpmn:extensionElements>
+        <camunda:connector>
+          <camunda:inputOutput>
+            <camunda:inputParameter name="method">GET</camunda:inputParameter>
+            <camunda:inputParameter name="url">${zoneService.endpoint(posterFormat)}</camunda:inputParameter>
+            <camunda:outputParameter name="zones">${zoneService.output(response, cities, price)}</camunda:outputParameter>
+          </camunda:inputOutput>
+          <camunda:connectorId>http-connector</camunda:connectorId>
+        </camunda:connector>
+      </bpmn:extensionElements>
+      <bpmn:incoming>Flow_0q6zbxs</bpmn:incoming>
+      <bpmn:outgoing>Flow_1avpz9w</bpmn:outgoing>
+    </bpmn:serviceTask>
+    <bpmn:serviceTask id="Activity_0djequo" name="Debugger" camunda:expression="${myService.debugger(execution)}">
+      <bpmn:incoming>Flow_0rhlx6z</bpmn:incoming>
+      <bpmn:outgoing>Flow_1tn9mdt</bpmn:outgoing>
+    </bpmn:serviceTask>
+    <bpmn:serviceTask id="Activity_13l0gra" name="Check Availability">
+      <bpmn:extensionElements>
+        <camunda:connector>
+          <camunda:inputOutput>
+            <camunda:inputParameter name="payload">${postingService.availabilityInput(user, posterFormat, zones)}</camunda:inputParameter>
+            <camunda:inputParameter name="url">${postingService.endpoint()}</camunda:inputParameter>
+            <camunda:outputParameter name="availability">${postingService.availabilityOutput(XML(response))}</camunda:outputParameter>
+          </camunda:inputOutput>
+          <camunda:connectorId>soap-http-connector</camunda:connectorId>
+        </camunda:connector>
+      </bpmn:extensionElements>
+      <bpmn:incoming>Flow_1avpz9w</bpmn:incoming>
+      <bpmn:outgoing>Flow_0rhlx6z</bpmn:outgoing>
+    </bpmn:serviceTask>
+    <bpmn:sequenceFlow id="Flow_1tn9mdt" sourceRef="Activity_0djequo" targetRef="Event_09xtvgk" />
+    <bpmn:sequenceFlow id="Flow_1avpz9w" sourceRef="Activity_05dl5f8" targetRef="Activity_13l0gra" />
+    <bpmn:sequenceFlow id="Flow_0rhlx6z" sourceRef="Activity_13l0gra" targetRef="Activity_0djequo" />
+  </bpmn:process>
+  <bpmn:message id="Message_2j623qs" name="booking-info" />
+  <bpmndi:BPMNDiagram id="BPMNDiagram_1">
+    <bpmndi:BPMNPlane id="BPMNPlane_1" bpmnElement="Process_1w6q9tq">
+      <bpmndi:BPMNShape id="Event_17qbimn_di" bpmnElement="StartEvent_1">
+        <dc:Bounds x="179" y="79" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="186" y="122" width="23" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Event_09xtvgk_di" bpmnElement="Event_09xtvgk">
+        <dc:Bounds x="872" y="262" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="881" y="305" width="19" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_06ypj9a_di" bpmnElement="Activity_1c2ujb9">
+        <dc:Bounds x="260" y="57" width="100" height="80" />
+        <bpmndi:BPMNLabel />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="BPMNShape_1mep0d2" bpmnElement="Activity_05dl5f8">
+        <dc:Bounds x="410" y="57" width="100" height="80" />
+        <bpmndi:BPMNLabel />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_0olsfpu_di" bpmnElement="Activity_0djequo">
+        <dc:Bounds x="720" y="230" width="100" height="80" />
+        <bpmndi:BPMNLabel />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_0z18kog_di" bpmnElement="Activity_13l0gra">
+        <dc:Bounds x="590" y="57" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="Flow_1iztq11_di" bpmnElement="Flow_1iztq11">
+        <di:waypoint x="215" y="97" />
+        <di:waypoint x="260" y="97" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_0q6zbxs_di" bpmnElement="Flow_0q6zbxs">
+        <di:waypoint x="360" y="97" />
+        <di:waypoint x="410" y="97" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_1tn9mdt_di" bpmnElement="Flow_1tn9mdt">
+        <di:waypoint x="820" y="270" />
+        <di:waypoint x="846" y="270" />
+        <di:waypoint x="846" y="280" />
+        <di:waypoint x="872" y="280" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_1avpz9w_di" bpmnElement="Flow_1avpz9w">
+        <di:waypoint x="510" y="97" />
+        <di:waypoint x="590" y="97" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_0rhlx6z_di" bpmnElement="Flow_0rhlx6z">
+        <di:waypoint x="690" y="97" />
+        <di:waypoint x="705" y="97" />
+        <di:waypoint x="705" y="270" />
+        <di:waypoint x="720" y="270" />
+      </bpmndi:BPMNEdge>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+</bpmn:definitions>
