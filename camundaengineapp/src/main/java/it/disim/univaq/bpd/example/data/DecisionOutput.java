@@ -17,11 +17,4 @@ public class DecisionOutput implements Serializable {
 	}
 	
 	public DecisionOutput() {}
-	
-	public String toString() {
-   		String data = "Account Holder: " + this.accountHolder + "\n"
-			+ "Invoice Number: " + this.invoiceNumber + "\n"
-			+ "Amount Due: " + this.amountDue + "\n";
-   		return data;
-	}
 }

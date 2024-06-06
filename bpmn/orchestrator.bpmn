@@ -39,7 +39,7 @@
       <bpmn:incoming>Flow_0q6zbxs</bpmn:incoming>
       <bpmn:outgoing>Flow_1avpz9w</bpmn:outgoing>
     </bpmn:serviceTask>
-    <bpmn:serviceTask id="Activity_0djequo" name="Write on File" camunda:expression="${myService.write(response)}">
+    <bpmn:serviceTask id="Activity_0djequo" name="Write on File" camunda:expression="${myService.write(user,  decisionInput, response)}">
       <bpmn:incoming>Flow_191wsgm</bpmn:incoming>
       <bpmn:outgoing>Flow_1tn9mdt</bpmn:outgoing>
     </bpmn:serviceTask>
