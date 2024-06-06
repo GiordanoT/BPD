@@ -5,13 +5,14 @@ import org.springframework.stereotype.Service;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import it.disim.univaq.bpd.example.data.BookingInput;
 import it.disim.univaq.bpd.example.data.User;
 
 @Service("userService")
 public class UserService {
 	
-	public String endpoint(String username) {
-		String url = "http://localhost:9080/user/" + username;
+	public String endpoint(BookingInput input) {
+		String url = "http://localhost:9080/user/" + input.username;
 		System.out.println("Genereting url: " + url);
 		return url;
 	}

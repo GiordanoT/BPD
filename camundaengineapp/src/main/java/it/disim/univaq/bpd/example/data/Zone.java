@@ -15,7 +15,6 @@ public class Zone implements Serializable {
 		this.city = city.replaceAll("\"", "");
 		this.price = price;
 	}
-	public String toString() {
-		return this.city + ": " + this.name + " -> " + this.price;
-	}
+	
+	public Zone() {}
 }

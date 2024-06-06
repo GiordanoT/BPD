@@ -9,7 +9,7 @@ public class Availability implements Serializable {
 	
 	public Availability(String requestId, String available) {
 		this.requestId = requestId.replaceAll("\"", "");
-		this.available = available == "true";
+		this.available = Boolean.parseBoolean(available.replaceAll("\"", ""));
 	}
 	
 	public Availability() {}

@@ -1,5 +1,7 @@
 package it.disim.univaq.bpd.example.controllers;
 
+import java.util.List;
+
 import org.camunda.bpm.engine.RuntimeService;
 import org.camunda.bpm.engine.runtime.MessageCorrelationResultWithVariables;
 import org.camunda.bpm.engine.variable.VariableMap;
@@ -9,7 +11,14 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
-import it.disim.univaq.bpd.example.data.BookingInfo;
+
+import it.disim.univaq.bpd.example.data.Availability;
+import it.disim.univaq.bpd.example.data.BookingInput;
+import it.disim.univaq.bpd.example.data.BookingOutput;
+import it.disim.univaq.bpd.example.data.DecisionOutput;
+import it.disim.univaq.bpd.example.data.DecisionInput;
+import it.disim.univaq.bpd.example.data.DecisionOutput;
+import it.disim.univaq.bpd.example.data.Zone;
 
 @RestController
 public class MyController {
@@ -18,59 +27,38 @@ public class MyController {
 	private RuntimeService service;
 	
 	@PostMapping("book")
-	public String getInfo(@RequestBody BookingInfo obj) {
+	public BookingOutput getInfo(@RequestBody BookingInput request) {
 		System.out.println("Booking Info received!");
+		BookingInput input = new BookingInput(request.username, request.cities, request.posterFormat, request.price);
 		
-		String username = obj.username;
-		String[] cities = obj.cities;
-		String posterFormat = obj.posterFormat;
-		float price = obj.price;
-		if(username == "" || cities.length <= 0 || posterFormat == "" || price <= 0) return "Invalid Data!";
-		
-		service
+		MessageCorrelationResultWithVariables correlation = service
 			.createMessageCorrelation("booking-info")
-			.setVariable("username", username)
-			.setVariable("cities", cities)
-			.setVariable("posterFormat", posterFormat)
-			.setVariable("price", price)
-			.correlate();
+			.setVariable("bookingInput", input)
+			.correlateWithResultAndVariables(false);
 		
-		return "Info received!";
+		VariableMap variables = correlation.getVariables();
+		Availability availibility = (Availability) variables.get("availability");
+		List<Zone> zones = (List<Zone>) variables.get("zones");
+		float price = 0;
+		for(Zone zone: zones) {
+			price = price + zone.price;
+		}
+		return new BookingOutput(availibility.requestId, availibility.available, zones, price);
 	}
 
-	@GetMapping("message-1")
-	public VariableMap getMessageOne() {
-		System.out.println("Message 1 received!");
-
+	@PostMapping("decision")
+	public DecisionOutput getDecision(@RequestBody DecisionInput request) {
+		System.out.println("Decision received!");
+		DecisionInput input = new DecisionInput(request.requestId, request.decision);
+		
 		MessageCorrelationResultWithVariables correlation = service
-				.createMessageCorrelation("message-1")
+				.createMessageCorrelation("decision")
+				.setVariable("decisionInput", input)
 				.correlateWithResultAndVariables(false);
 
-		return correlation.getVariables();
-	}
-	
-	@GetMapping("message-2/{businessKey}")
-	public void getMessageTwo(@PathVariable String businessKey) {
-		System.out.println("Message 2 received!");
-
-		service
-			.createMessageCorrelation("message-2")
-			.processInstanceBusinessKey(businessKey)
-			.setVariable("counter", 100)
-			.correlate();
-	}
-
-
-	@GetMapping("message-3/{variableValue}")
-	public Integer getMessageThree(@PathVariable String variableValue) {
-		System.out.println("Message 3 received!");
-
-		MessageCorrelationResultWithVariables correlation = service
-				.createMessageCorrelation("message-3")
-				.setVariable("counter", Integer.parseInt(variableValue))
-				.correlateWithResultAndVariables(false);
-
-		return correlation.getVariables().getValue("counter", Integer.class);
+		VariableMap variables = correlation.getVariables();
+		DecisionOutput confirmation = (DecisionOutput) variables.get("response");
+		return confirmation;
 	}
 	
 }
