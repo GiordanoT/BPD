@@ -77,7 +77,7 @@ public class PostingService {
 		String accountHolder = bill.childElement("accountHolder").textContent();
 		String invoiceNumber = bill.childElement("invoiceNumber").textContent();
 		String amountDue = bill.childElement("amountDue").textContent();
-		return new DecisionOutput(accountHolder, invoiceNumber, amountDue);
+		return new DecisionOutput(accountHolder, invoiceNumber, amountDue, "confirmed");
 	}
 	
 	public String cancelInput(DecisionInput input) {
@@ -93,7 +93,7 @@ public class PostingService {
 	}
 
 	public DecisionOutput cancelOutput(DomXmlElement response) {
-		return new DecisionOutput("", "", "0");
+		return new DecisionOutput("", "", "0", "cancelled");
 	}
 	
 }
