@@ -1,3 +1,9 @@
 username, request ID, invoice number, amount due;
 mariorossi, x9P4dJ6Rbo, 9161744811, 61.399998;
 mariorossi, qDcdYofery, 9752326544, 61.399998;
+mariorossi, B55GlZmxBS, 2978671282, 61.399998;
+mariorossi, lPwBdR4vxL, 1800254308, 61.399998;
+mariorossi, qtUiUurAzE, 2185846813, 61.399998;
+mariorossi, U4703rClao, 6322449132, 61.399998;
+mariorossi, W54ZyWoCFs, 5665554172, 61.399998;
+mariorossi, O8WYeFhP6e, 5266077861, 89.9;

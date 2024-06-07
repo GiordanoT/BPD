@@ -24,5 +24,8 @@ export type ConfirmationInput = {
 };
 
 export type ConfirmationOutput = {
+    accountHolder: string,
+    invoiceNumber: string,
+    amountDue: number,
     status: string
 };
