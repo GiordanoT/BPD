@@ -2,6 +2,7 @@ package it.disim.univaq.bpd.example.data;
 
 import java.io.Serializable;
 
+/* REST API */
 public class DecisionInput implements Serializable {
 	private static final long serialVersionUID = 1L;
 	public String requestId;

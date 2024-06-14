@@ -25,7 +25,7 @@ function App() {
           </div>
           <div className={'d-block text-center'}>
             <b>Amount Due:</b>
-            <label className={'ms-2'}>{confirmationResponse.amountDue}$</label>
+            <label className={'ms-2'}>{confirmationResponse.amountDue.toFixed(2)}$</label>
           </div>
         </>}
         <div className={'d-block text-center'}>
