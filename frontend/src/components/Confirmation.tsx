@@ -7,8 +7,15 @@ function Confirmation(props: Props) {
     const {data, setResponse} = props;
 
     return (<div className={'border mx-auto mt-3 card w-50'} style={{overflow: 'hidden'}}>
-        <h6 className={'font-bold text-center bg-success text-white my-0 p-2'}>{data.requestId}</h6>
+        <h6 className={'font-bold text-center bg-dark text-white my-0 p-2'}>{data.requestId}</h6>
         <hr className={'my-0'} />
+        <div className={'mt-2 d-flex'} style={{justifyContent: 'center'}}>
+            <b>Available:</b>
+            <div style={{width: '1.2em', height: '1.2em', borderRadius: '999px'}}
+                 className={`d-block my-auto ms-1 ${data.available ? 'bg-success' : 'bg-danger'}`}>
+
+            </div>
+        </div>
         <div className={'mt-2'}>
             {data.zones.map((zone, index) => <div key={index} className={'d-block text-center'}>
                 <b>Zone {index + 1}:</b>
@@ -20,7 +27,7 @@ function Confirmation(props: Props) {
             <label className={'ms-2'}>{data.price.toFixed(2)}$</label>
         </div>
         <div className={'d-flex'}>
-            <button disabled={data.zones.length <= 0} className={'d-block mx-auto btn btn-success my-4'} onClick={async e => {
+            <button disabled={!(data.available) || data.zones.length <= 0} className={'d-block mx-auto btn btn-success my-4'} onClick={async e => {
                 const obj: ConfirmationInput = {
                     requestId: data.requestId,
                     decision: 'confirm'

@@ -27,7 +27,7 @@ function Availability(props: Props) {
         if(response) setResponse(response);
         else alert('Error: Cannot connect to backend!');
     }}>
-        <h6 className={'font-bold text-center bg-success text-white my-0 p-2'}>CHECK AVAILABILITY</h6>
+        <h6 className={'font-bold text-center bg-dark text-white my-0 p-2'}>CHECK AVAILABILITY</h6>
         <hr className={'my-0'} />
         <div className={'d-flex p-2 mx-auto'}>
             <b className={'my-auto'}>Username</b>

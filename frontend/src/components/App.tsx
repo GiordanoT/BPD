@@ -11,7 +11,7 @@ function App() {
     {(availabilityResponse === undefined) && <Availability setResponse={setAvailabilityResponse}  />}
     {(availabilityResponse !== undefined && ! (confirmationResponse !== undefined)) && <Confirmation data={availabilityResponse} setResponse={setConfirmationResponse} />}
     {(confirmationResponse !== undefined) && <div className={'border mx-auto mt-3 card w-50'} style={{overflow: 'hidden'}}>
-      <h6 className={'font-bold text-center bg-success text-white my-0 p-2'}>{availabilityResponse?.requestId}</h6>
+      <h6 className={'font-bold text-center bg-dark text-white my-0 p-2'}>{availabilityResponse?.requestId}</h6>
       <hr className={'my-0'} />
       <div className={'mt-2'}>
         {confirmationResponse.status === 'confirmed' && <>

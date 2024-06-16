@@ -14,6 +14,7 @@ export type Zone = {
 
 export type AvailabilityOutput = {
     zones: Zone[],
+    available: boolean,
     price: number,
     requestId: string
 };
